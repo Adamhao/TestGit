@@ -19,6 +19,7 @@ public class CollectionTest {
         System.out.println("Hello");
         //list.forEach(x -> System.out.println(x.getName() + "||" + x.getValue()));
         System.out.println(list.remove(new ListTest("a","b")));
+        System.out.println(list.remove(new ListTest("a","b")));
         list.forEach(x -> System.out.println(x.getName() + "||" + x.getValue()));
 
 
