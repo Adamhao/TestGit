@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+    <!-- 修改SessionID -->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionIdCookie">
+            <bean class="org.apache.shiro.web.servlet.SimpleCookie">
+                <property name="name" value="ISessionID"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--
+        创建SecurityManager管理
+        Ctrl + N 全局搜索..
+    -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm">
+            <bean class="com.etoak.shiro.MyRealm"/>
+        </property>
+        <!--<property name="sessionManager" ref="sessionManager"></property>-->
+    </bean>
+
+
+    <!--
+        filterChainDefinitionMap; //urlPathExpression_to_comma-delimited-filter-chain-definition
+        loginUrl;
+        successUrl;
+        unauthorizedUrl;
+    -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"></property>
+
+        <property name="loginUrl" value="/" />
+        <!--<property name="successUrl" value="/login/index" />-->
+
+        <property name="unauthorizedUrl" value="/pages/403.jsp" />
+
+        <property name="filterChainDefinitions">
+            <value>
+                /pages/index.jsp = perms[VIP1:opts]
+                /login/login = anon
+                /login/logout = logout
+                /login/index = perms[VIP1:opts]
+                /user/** = anon
+                /dept/** = anon
+                /emp/empAddAndUpdate = anon
+                /emp/** = authc,roles[VIP2],perms[VIP2:opts]
+            </value>
+        </property>
+    </bean>
+
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+
+</beans>
