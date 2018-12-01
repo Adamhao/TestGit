@@ -16,7 +16,7 @@ public class CollectionTest {
         List<ListTest> list = new ArrayList<>();
         list.add(listTest);
         list.add(listTest1);
-
+        System.out.println("Hello");
         //list.forEach(x -> System.out.println(x.getName() + "||" + x.getValue()));
         System.out.println(list.remove(new ListTest("a","b")));
         list.forEach(x -> System.out.println(x.getName() + "||" + x.getValue()));
